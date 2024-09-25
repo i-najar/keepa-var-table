@@ -86,7 +86,7 @@ function App() {
     <div>
       <h1>Keepa Product Data</h1>
       {data && (
-        <table>
+        <table className="product-table">
           <thead>
             <tr>
               <th>ASIN</th>
@@ -96,23 +96,29 @@ function App() {
           </thead>
           <tbody>
             <tr>
-              <td>
+              <td className="asin-cell">
                 <p>{data.asin}</p>
                 {data.images.length > 0 && (
                   <img
                     src={`https://images-na.ssl-images-amazon.com/images/I/${data.images[0]}.jpg`}
                     alt={data.asin}
-                    style={{ width: "100px" }}
+                    className="product-image"
                   />
                 )}
               </td>
-              <td>
+              <td className="attributes-cell">
                 <p>Size: {data.size}</p>
                 <p>Color: {data.color}</p>
               </td>
-              <td>
-                <p>Total Ratings: {data.totalRatings}</p>
-                <p>Total Reviews: {data.totalReviews}</p>
+              <td className="variation-data-cell">
+                <p>
+                  Variation Ratings: {data.totalRatings} +
+                  {data.ratingDifference}
+                </p>
+                <p>
+                  Variation Reviews: {data.totalReviews} +
+                  {data.reviewDifference}
+                </p>
               </td>
             </tr>
           </tbody>
