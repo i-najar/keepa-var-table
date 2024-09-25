@@ -27,7 +27,7 @@ function App() {
           size: product.size,
           color: product.color,
           offers: product.offers,
-          reviews: product.reviews?.reviewCount || [],
+          reviews: product.reviews?.reviewCount || [], // Might be redundant
           ratings: product.reviews?.ratingCount || [],
           variation: product.variations,
           totalRatings: getLatestCount(product.reviews?.ratingCount || []),
