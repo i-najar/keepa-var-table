@@ -28,10 +28,10 @@ const Variant = ({ variant, isMainProduct }) => {
           {variant.numberOfOffers} offers from ${variant.lowestPrice}
         </p>
         <p>
-          Variation Ratings: {variant.totalRatings} + {variant.ratingDifference}
+          Variation Ratings: {variant.totalRatings} +{variant.ratingDifference}
         </p>
         <p>
-          Variation Reviews: {variant.totalReviews} + {variant.reviewDifference}
+          Variation Reviews: {variant.totalReviews} +{variant.reviewDifference}
         </p>
       </td>
     </tr>
