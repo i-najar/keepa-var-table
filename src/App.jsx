@@ -20,18 +20,39 @@ function App() {
         const response = await axios.get(url);
         const product = response.data.products[0];
 
+        const offersArray = product.offers
+          .map((offer) => {
+            const offerCSV = offer.offerCSV || [];
+            const currentPrice =
+              offerCSV.length >= 2 ? offerCSV[offerCSV.length - 2] : null;
+            return currentPrice;
+          })
+          .filter((price) => price !== null);
+
+        const numberOfOffers = offersArray.length;
+        const lowestPriceCents =
+          numberOfOffers > 0 ? Math.min(...offersArray) : null;
+        const lowestPriceDollars =
+          lowestPriceCents !== null
+            ? (lowestPriceCents / 100).toFixed(2)
+            : null;
+
         const filteredData = {
           asin: product.asin,
           images: product.imagesCSV ? product.imagesCSV.split(",") : [],
           size: product.size,
           color: product.color,
-          offers: product.offers,
+          offers: offersArray,
           reviews: product.reviews?.reviewCount || [],
           ratings: product.reviews?.ratingCount || [],
-          variation: product.variations,
+          variations: product.variations,
           totalRatings: getLatestCount(product.reviews?.ratingCount || []),
           totalReviews: getLatestCount(product.reviews?.reviewCount || []),
+          numberOfOffers,
+          lowestPrice: lowestPriceDollars,
         };
+
+        console.log(filteredData);
 
         return filteredData;
       } catch (err) {
@@ -86,43 +107,48 @@ function App() {
     <div>
       <h1>Keepa Product Data</h1>
       {data && (
-        <table className="product-table">
-          <thead>
-            <tr>
-              <th>ASIN</th>
-              <th>Attributes</th>
-              <th>Variation Data</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td className="asin-cell">
-                <p>{data.asin}</p>
-                {data.images.length > 0 && (
-                  <img
-                    src={`https://images-na.ssl-images-amazon.com/images/I/${data.images[0]}.jpg`}
-                    alt={data.asin}
-                    className="product-image"
-                  />
-                )}
-              </td>
-              <td className="attributes-cell">
-                <p>Size: {data.size}</p>
-                <p>Color: {data.color}</p>
-              </td>
-              <td className="variation-data-cell">
-                <p>
-                  Variation Ratings: {data.totalRatings} +
-                  {data.ratingDifference}
-                </p>
-                <p>
-                  Variation Reviews: {data.totalReviews} +
-                  {data.reviewDifference}
-                </p>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <div>
+          <table className="product-table">
+            <thead>
+              <tr>
+                <th>ASIN</th>
+                <th>Attributes</th>
+                <th>Variation Data</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="asin-cell">
+                  <p>{data.asin}</p>
+                  {data.images.length > 0 && (
+                    <img
+                      src={`https://images-na.ssl-images-amazon.com/images/I/${data.images[0]}.jpg`}
+                      alt={data.asin}
+                      className="product-image"
+                    />
+                  )}
+                </td>
+                <td className="attributes-cell">
+                  <p>Size: {data.size}</p>
+                  <p>Color: {data.color}</p>
+                </td>
+                <td className="variation-data-cell">
+                  <p>
+                    {data.numberOfOffers} offers from ${data.lowestPrice}
+                  </p>
+                  <p>
+                    Variation Ratings: {data.totalRatings} +
+                    {data.ratingDifference}
+                  </p>
+                  <p>
+                    Variation Reviews: {data.totalReviews} +
+                    {data.reviewDifference}
+                  </p>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );
