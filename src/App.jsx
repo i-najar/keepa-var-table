@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./App.css";
+import ProductTable from "./ProductTable";
 
 function App() {
   const [data, setData] = useState(null);
@@ -45,7 +46,7 @@ function App() {
           offers: offersArray,
           reviews: product.reviews?.reviewCount || [],
           ratings: product.reviews?.ratingCount || [],
-          variations: product.variations,
+          variations: product.variations || [],
           totalRatings: getLatestCount(product.reviews?.ratingCount || []),
           totalReviews: getLatestCount(product.reviews?.reviewCount || []),
           numberOfOffers,
@@ -101,55 +102,10 @@ function App() {
     fetchData();
   }, [ASIN, API_KEY]);
 
-  if (loading) return <p>Loading...</p>;
-
   return (
     <div>
       <h1>Keepa Product Data</h1>
-      {data && (
-        <div>
-          <table className="product-table">
-            <thead>
-              <tr>
-                <th>ASIN</th>
-                <th>Attributes</th>
-                <th>Variation Data</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td className="asin-cell">
-                  <p>{data.asin}</p>
-                  {data.images.length > 0 && (
-                    <img
-                      src={`https://images-na.ssl-images-amazon.com/images/I/${data.images[0]}.jpg`}
-                      alt={data.asin}
-                      className="product-image"
-                    />
-                  )}
-                </td>
-                <td className="attributes-cell">
-                  <p>Size: {data.size}</p>
-                  <p>Color: {data.color}</p>
-                </td>
-                <td className="variation-data-cell">
-                  <p>
-                    {data.numberOfOffers} offers from ${data.lowestPrice}
-                  </p>
-                  <p>
-                    Variation Ratings: {data.totalRatings} +
-                    {data.ratingDifference}
-                  </p>
-                  <p>
-                    Variation Reviews: {data.totalReviews} +
-                    {data.reviewDifference}
-                  </p>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      )}
+      {data && <ProductTable data={data} />}
     </div>
   );
 }
