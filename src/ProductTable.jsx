@@ -2,7 +2,7 @@ import React from "react";
 import Variant from "./Variant";
 
 const ProductTable = ({ data }) => {
-  console.log("DATA:", JSON.stringify(data, null, 2)); // Log the data structure
+  //console.log("DATA:", JSON.stringify(data, null, 2)); // Log the data structure
 
   return (
     <table className="product-table">

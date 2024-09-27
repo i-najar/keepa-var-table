@@ -37,7 +37,7 @@ function App() {
     const fetchProductData = async (variantASINs) => {
       if (variantASINs.length === 0) return [];
 
-      console.log("FETCHING DATA FOR ASINS:", variantASINs);
+      //console.log("FETCHING DATA FOR ASINS:", variantASINs);
 
       const url = `https://api.keepa.com/product?key=${API_KEY}&domain=1&asin=${variantASINs.join(
         ","
@@ -46,7 +46,7 @@ function App() {
         const response = await axios.get(url);
         const products = response.data.products; // Get the array of products
 
-        console.log("RECEIVED PRODUCT DATA:", products);
+        //console.log("RECEIVED PRODUCT DATA:", products);
 
         const productMap = new Map();
 
@@ -119,45 +119,67 @@ function App() {
       }
     };
 
-    const fetchLastMonthData = async () => {
-      const lastMonthUrl = `https://api.keepa.com/product?key=${API_KEY}&domain=1&asin=${ASIN}&rating=1&stats=30`;
+    const fetchLastMonthData = async (variantASINs) => {
+      if (variantASINs.length === 0) return [];
+
+      const lastMonthUrl = `https://api.keepa.com/product?key=${API_KEY}&domain=1&asin=${variantASINs.join(
+        ","
+      )}&rating=1&stats=30`;
       try {
         const response = await axios.get(lastMonthUrl);
-        const product = response.data.products[0];
+        const products = response.data.products;
 
-        return {
+        return products.map((product) => ({
+          asin: product.asin,
           lastMonthRatings: getLatestCount(product.reviews?.ratingCount || []),
           lastMonthReviews: getLatestCount(product.reviews?.reviewCount || []),
-        };
+        }));
       } catch (err) {
         console.error(
-          `Error fetching last month's data for ASIN ${ASIN}:`,
+          `Error fetching last month's data for ASINs ${variantASINs.join(
+            ", "
+          )}:`,
           err
         );
+        return [];
       }
     };
 
     const fetchData = async () => {
       setLoading(true);
       try {
-        const variantASINs = await fetchMainProduct(); // Get variant ASINs first
-        console.log("MAIN PRODUCT VARIANT ASINS:", variantASINs);
+        const variantASINs = await fetchMainProduct();
+        //console.log("MAIN PRODUCT VARIANT ASINS:", variantASINs);
 
         // Pass variantASINs to fetchProductData
         const productsData =
           variantASINs.length > 0 ? await fetchProductData(variantASINs) : [];
-        const lastMonthData = await fetchLastMonthData();
+        const lastMonthData = await fetchLastMonthData(variantASINs);
+
+        //console.log("Current Month Data:", productsData);
+        //console.log("Last Month Data:", lastMonthData);
 
         // If you want to process the productsData further, you can do it here
         // For example, you can aggregate results or just set the data directly
         if (productsData.length > 0 && lastMonthData) {
           const aggregatedData = productsData.map((productData) => {
+            const lastMonthEntry =
+              lastMonthData.find((entry) => entry.asin === productData.asin) ||
+              {};
+            // console.log(
+            //   `Current Ratings for ${productData.asin}: ${
+            //     productData.totalRatings
+            //   }, Last Month Ratings:  ${lastMonthEntry.lastMonthRatings || 0}`
+            // );
+            // console.log(
+            //   `Current Reviews: ${productData.totalReviews}, Last Month Reviews for ${productData.asin}: ${lastMonthEntry.lastMonthReviews}`
+            // );
             const ratingDifference =
-              productData.totalRatings - lastMonthData.lastMonthRatings;
+              productData.totalRatings - lastMonthEntry.lastMonthRatings;
             const reviewDifference =
-              productData.totalReviews - lastMonthData.lastMonthReviews;
+              productData.totalReviews - lastMonthEntry.lastMonthReviews;
 
-            console.log("RATINGDIFF: " + ratingDifference);
+            //console.log("RATINGDIFF: " + ratingDifference);
 
             return {
               ...productData,
