@@ -81,7 +81,7 @@ export const fetchProductData = async (variantASINs) => {
       }
     });
 
-    const allProductData = Array.from(productMap.values()); // Convert Map back to array
+    const allProductData = Array.from(productMap.values());
     console.log(
       "ALL PRODUCT DATA (AFTER PROCESSING):",
       JSON.stringify(allProductData, null, 2)
@@ -102,7 +102,7 @@ export const fetchProductData = async (variantASINs) => {
       `Error fetching data for ASINs ${variantASINs.join(", ")}:`,
       err
     );
-    return []; // Return an empty array in case of an error
+    return []; // return array if error
   }
 };
 

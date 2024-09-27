@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import "./App.css";
 import ProductTable from "./ProductTable";
-// import fetchData from "./helpers/fetchData.js";
 import {
   fetchMainProduct,
   fetchProductData,
