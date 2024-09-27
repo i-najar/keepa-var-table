@@ -41,7 +41,7 @@ function App() {
 
       const url = `https://api.keepa.com/product?key=${API_KEY}&domain=1&asin=${variantASINs.join(
         ","
-      )}`;
+      )}&rating=1&offers=20`;
       try {
         const response = await axios.get(url);
         const products = response.data.products; // Get the array of products
@@ -86,6 +86,11 @@ function App() {
               numberOfOffers,
               lowestPrice: lowestPriceDollars,
             });
+            console.log(
+              `TOTAL RATINGS FOR ${product.asin}: ${getLatestCount(
+                product.reviews?.ratingCount || []
+              )}`
+            );
           }
         });
 
