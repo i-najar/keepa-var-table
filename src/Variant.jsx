@@ -35,6 +35,10 @@ const Variant = ({ variant, isMainProduct }) => {
           Variation Reviews: {variant.totalReviews} (+{variant.reviewDifference}{" "}
           last month)
         </p>
+
+        {variant.sales !== undefined && (
+          <p>Variation Sales: {variant.sales}+/month</p>
+        )}
       </td>
     </tr>
   );

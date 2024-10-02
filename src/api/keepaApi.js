@@ -33,7 +33,7 @@ export const fetchProductData = async (variantASINs) => {
     const response = await axios.get(url);
     const products = response.data.products; // Get the array of products
 
-    //console.log("RECEIVED PRODUCT DATA:", products);
+    console.log("RECEIVED PRODUCT DATA:", JSON.stringify(products, null, 2));
 
     const productMap = new Map();
 
@@ -60,6 +60,8 @@ export const fetchProductData = async (variantASINs) => {
             ? (lowestPriceCents / 100).toFixed(2)
             : null;
 
+        const monthlySold = product.monthlySold;
+
         productMap.set(product.asin, {
           asin: product.asin,
           images: product.imagesCSV ? product.imagesCSV.split(",") : [],
@@ -72,8 +74,9 @@ export const fetchProductData = async (variantASINs) => {
           totalReviews: getLatestCount(product.reviews?.reviewCount || []),
           numberOfOffers,
           lowestPrice: lowestPriceDollars,
-          //sales: monthlySold
+          sales: monthlySold,
         });
+        console.log(`SALES FOR ${product.asin}: ${monthlySold}`);
         console.log(
           `TOTAL RATINGS FOR ${product.asin}: ${getLatestCount(
             product.reviews?.ratingCount || []
