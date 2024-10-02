@@ -72,6 +72,7 @@ export const fetchProductData = async (variantASINs) => {
           totalReviews: getLatestCount(product.reviews?.reviewCount || []),
           numberOfOffers,
           lowestPrice: lowestPriceDollars,
+          //sales: monthlySold
         });
         console.log(
           `TOTAL RATINGS FOR ${product.asin}: ${getLatestCount(
