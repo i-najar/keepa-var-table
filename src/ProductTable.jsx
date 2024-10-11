@@ -16,7 +16,6 @@ const ProductTable = ({ data }) => {
       <tbody>
         {data.map((product, index) => (
           <React.Fragment key={product.asin || index}>
-            {" "}
             <Variant variant={product} isMainProduct={true} />
             {product.variations && product.variations.length > 0 && (
               <React.Fragment>
