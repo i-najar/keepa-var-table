@@ -2,7 +2,7 @@ import React from "react";
 import Variant from "./Variant";
 
 const ProductTable = ({ data }) => {
-  //console.log("DATA:", JSON.stringify(data, null, 2)); // Log the data structure
+  //console.log("DATA:", JSON.stringify(data, null, 2));
 
   return (
     <table className="product-table">
@@ -17,10 +17,7 @@ const ProductTable = ({ data }) => {
         {data.map((product, index) => (
           <React.Fragment key={product.asin || index}>
             {" "}
-            {/* Use ASIN as key for better uniqueness */}
-            {/* Main Product */}
             <Variant variant={product} isMainProduct={true} />
-            {/* Variants */}
             {product.variations && product.variations.length > 0 && (
               <React.Fragment>
                 {product.variations.map((variant, variantIndex) => (

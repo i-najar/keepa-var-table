@@ -52,7 +52,7 @@ function App() {
 
   return (
     <div>
-      <h1>Keepa Product Data</h1>
+      <h1>Keepa Product Variations Data</h1>
       {loading ? (
         <div className="loading-container">
           <div className="spinner"></div>
