@@ -146,6 +146,10 @@ export const fetchProductData = async (variantASINs) => {
 /**
  * Fetches last month's review and rating data for a list of product ASINs.
  *
+ * This function makes a batch API call for all ASIN variants and returns an array
+ * of objects containing ASINs and the counts of their ratings and reviews from the
+ * previous month.
+ *
  * @param {string[]} variantASINs - An array of ASINs.
  *
  * @returns {Promise<Array<{asin: string, lastMonthRatings: number, lastMonthReviews: number}>>}
@@ -195,7 +199,6 @@ export const fetchLastMonthData = async (variantASINs) => {
       );
       return {
         asin: product.asin,
-        rawLastMonthRatings: product.reviews?.ratingCount || [],
         lastMonthRatings: closestRatingCount ? closestRatingCount[1] : 0,
         lastMonthReviews: closestReviewCount ? closestReviewCount[1] : 0,
       };
